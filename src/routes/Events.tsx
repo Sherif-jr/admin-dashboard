@@ -9,7 +9,7 @@ const AllEvents: React.ComponentType = Loadable(
 
 export const Events: RouteObject = {
   path: "",
-  element: <SidebarLayout />,
+  element: <SidebarLayout guard />,
   children: [
     {
       path: "/events/all",

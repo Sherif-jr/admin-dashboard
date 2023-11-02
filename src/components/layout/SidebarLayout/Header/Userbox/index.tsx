@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import {
   Avatar,
@@ -21,6 +21,7 @@ import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import AccountTreeTwoToneIcon from "@mui/icons-material/AccountTreeTwoTone";
 import { User } from "../../../../../interfaces/User.interface";
+import { useAuthContext } from "../../../../../hooks/useAuthContext";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -58,6 +59,8 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
+  const { logOut } = useAuthContext();
+  const navigate = useNavigate();
   const user: User = {
     name: "Abdelrhman Sherif",
     avatarUrl: "assets/avatars/somwAvatar.png",
@@ -116,14 +119,25 @@ function HeaderUserbox() {
             <AccountBoxTwoToneIcon fontSize="small" />
             <ListItemText primary="My Profile" />
           </ListItem>
-          <ListItem button to="/management/dashboard-admins" component={NavLink}>
+          <ListItem
+            button
+            to="/management/dashboard-admins"
+            component={NavLink}
+          >
             <AccountTreeTwoToneIcon fontSize="small" />
             <ListItemText primary="Admin Accounts" />
           </ListItem>
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button
+            color="primary"
+            fullWidth
+            onClick={() => {
+              logOut();
+              navigate("/auth/login");
+            }}
+          >
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Sign out
           </Button>

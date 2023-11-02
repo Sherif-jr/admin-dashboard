@@ -31,7 +31,7 @@ function SidebarMenu() {
         {menuItems.map((group) => (
           <GroupItem item={group} key={group.id}>
             {group.children.map((item) => (
-              <Item item={item} />
+              <Item item={item} key={item.id} />
             ))}
           </GroupItem>
         ))}

@@ -2,7 +2,11 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import { Button, Stack } from "@mui/material";
+import { useAuthContext } from "../../../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 const LoginForm = () => {
+  const { login } = useAuthContext();
+  const navigate = useNavigate();
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
@@ -22,6 +26,8 @@ const LoginForm = () => {
       })}
       onSubmit={async (values) => {
         console.log(values);
+        login({ _id: "wqerrytui", email: values.email, role: "not important" });
+        navigate("/");
       }}
     >
       {({

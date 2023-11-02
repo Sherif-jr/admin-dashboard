@@ -10,7 +10,7 @@ const Login: React.ComponentType = Loadable(
 
 export const AuthRoutes: RouteObject = {
   path: "",
-  element: <MinimalLayout />,
+  element: <MinimalLayout guard />,
   children: [
     {
       path: "auth/login",

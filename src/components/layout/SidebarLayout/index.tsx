@@ -1,17 +1,16 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { Box, alpha, lighten, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
-
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import ProtectedRoute from "../../guards/ProtectedRoute";
 
 interface SidebarLayoutProps {
-  children?: ReactNode;
+  guard?: boolean;
 }
 
-const SidebarLayout: FC<SidebarLayoutProps> = () => {
+const MainLayout: FC = () => {
   const theme = useTheme();
-  console.log("sidebarLayout");
 
   return (
     <>
@@ -65,4 +64,15 @@ const SidebarLayout: FC<SidebarLayoutProps> = () => {
   );
 };
 
+const SidebarLayout: FC<SidebarLayoutProps> = ({ guard }) => {
+  if (guard) {
+    return (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    );
+  } else {
+    return <MainLayout />;
+  }
+};
 export default SidebarLayout;

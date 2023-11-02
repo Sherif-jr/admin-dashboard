@@ -9,7 +9,7 @@ const AllUsers: React.ComponentType = Loadable(
 
 export const Users: RouteObject = {
   path: "",
-  element: <SidebarLayout />,
+  element: <SidebarLayout guard />,
   children: [
     {
       path: "/users/all",

@@ -9,7 +9,7 @@ const LandingSettings: React.ComponentType = Loadable(
 
 export const WebsiteSettings: RouteObject = {
   path: "",
-  element: <SidebarLayout />,
+  element: <SidebarLayout guard />,
   children: [
     {
       path: "/website-settings/landing",

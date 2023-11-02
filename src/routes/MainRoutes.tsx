@@ -9,7 +9,7 @@ const Dashboard: React.ComponentType = Loadable(
 
 export const MainRoutes: RouteObject = {
   path: "",
-  element: <SidebarLayout />,
+  element: <SidebarLayout guard />,
   children: [
     {
       index: true,

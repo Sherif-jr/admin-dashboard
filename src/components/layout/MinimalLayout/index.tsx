@@ -1,7 +1,11 @@
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import GuestRoute from "../../guards/GuestRoute";
 
-const MinimalLayout = () => {
+interface MinLayoutProps {
+  guard?: boolean;
+}
+const Layout = () => {
   return (
     <Box
       sx={{
@@ -15,6 +19,20 @@ const MinimalLayout = () => {
       <Outlet />
     </Box>
   );
+};
+
+const MinimalLayout: React.FC<React.PropsWithChildren<MinLayoutProps>> = ({
+  guard,
+}) => {
+  if (guard) {
+    return (
+      <GuestRoute>
+        <Layout />
+      </GuestRoute>
+    );
+  } else {
+    return <Layout />;
+  }
 };
 
 export default MinimalLayout;

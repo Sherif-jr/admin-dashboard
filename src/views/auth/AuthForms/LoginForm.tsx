@@ -12,7 +12,9 @@ const LoginForm = () => {
       initialValues={{ email: "", password: "" }}
       validationSchema={Yup.object({
         email: Yup.string()
-          .email()
+          .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
+            message: "Email must be a valid email",
+          })
           .required("Email is required to login.")
           .label("Email"),
         password: Yup.string()
@@ -56,7 +58,7 @@ const LoginForm = () => {
             />
             <TextField
               fullWidth
-              type="text"
+              type="password"
               name="password"
               placeholder="password"
               variant="outlined"

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StyledEngineProvider } from "@mui/material";
 import { ThemeProvider } from "@mui/material";
 import { themeCreator } from "./base";
 

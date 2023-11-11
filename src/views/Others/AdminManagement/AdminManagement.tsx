@@ -10,20 +10,21 @@ import {
   IconButton,
   Stack,
 } from "@mui/material";
+import AdminsTable from "./AdminsTable/AdminTable";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { User } from "../../interfaces/User.interface";
 import {
-  addUser,
-  deleteUser,
-  editUser,
-  getAllUsers,
-} from "../../util/query/httpFunctions/userHttpFunctions";
-import UsersTable from "./UsersTable/UserTable";
-import queryClient from "../../util/query/queryClient";
-import { useEffect, useState } from "react";
-import generatePassword from "../../util/passwordGenetator";
+  addAdmin,
+  deleteAdmin,
+  editAdmin,
+  getAdmins,
+} from "../../../util/query/httpFunctions/adminHttpFunctios";
+import { Admin } from "../../../interfaces/Admin.interface";
 import { ContentCopy } from "@mui/icons-material";
+import { useState } from "react";
+import queryClient from "../../../util/query/queryClient";
 import { AxiosError } from "axios";
+import generatePassword from "../../../util/passwordGenetator";
+import { useAuthContext } from "../../../hooks/useAuthContext";
 
 interface ModalState {
   show: boolean;
@@ -40,17 +41,14 @@ const initialModal: ModalState = {
   message: "",
 };
 
-const AllUsers = () => {
+const AdminManagement = () => {
   const [modal, setModal] = useState<ModalState>(initialModal);
-  const { data, isRefetching, isLoading } = useQuery<User[]>({
-    queryKey: ["users", "all"],
-    queryFn: getAllUsers,
+  const { user } = useAuthContext();
+  const { data, isRefetching, isPending } = useQuery<Admin[]>({
+    queryKey: ["admins", "all"],
+    queryFn: getAdmins,
+    initialData: [],
   });
-  useEffect(() => {
-    if (!modal.show) {
-      queryClient.invalidateQueries({ queryKey: ["users", "all"] });
-    }
-  }, [modal.show]);
   const { mutate: userMutation, isPending: isMutPending } = useMutation({
     mutationFn: ({
       action,
@@ -58,23 +56,23 @@ const AllUsers = () => {
       id,
     }: {
       action: string;
-      user?: User;
+      user?: Admin;
       id?: string;
     }) => {
       if (action === "save") {
-        return editUser(user);
+        return editAdmin(user);
       }
       if (action === "delete") {
-        return deleteUser(id);
+        return deleteAdmin(id);
       }
       if (action === "add") {
-        return addUser(user);
+        return addAdmin(user);
       }
     },
     onMutate: ({ action, id }) => {
       if (action === "delete") {
         queryClient.cancelQueries();
-        queryClient.setQueryData(["users", "all"], (data: User[]) => {
+        queryClient.setQueryData(["admins", "all"], (data: Admin[]) => {
           const oldArr = [...data];
           const newArr = oldArr.filter((user) => user._id !== id);
           return newArr;
@@ -82,7 +80,7 @@ const AllUsers = () => {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["users", "all"] });
+      queryClient.invalidateQueries({ queryKey: ["admins", "all"] });
     },
     onSuccess: (_data, { action, user }) => {
       if (action === "add") {
@@ -101,11 +99,12 @@ const AllUsers = () => {
   return (
     <>
       <Card>
-        <UsersTable
-          data={data || []}
+        <AdminsTable
+          canEdit={user.isOwner}
+          data={data}
+          isLoading={isPending || isMutPending}
           isRefetching={isRefetching}
-          isLoading={isLoading || isMutPending}
-          onSaveEditUser={(newRow: User) => {
+          onSaveEditUser={(newRow: Admin) => {
             userMutation({
               user: newRow,
               action: "save",
@@ -120,33 +119,27 @@ const AllUsers = () => {
           }}
           onAddNewUser={() => {
             const newFakeId = Math.random().toString();
-            queryClient.setQueryData(["users", "all"], (data: User[]) => {
+            queryClient.setQueryData(["admins", "all"], (data: Admin[]) => {
               return [
                 ...data,
                 {
                   _id: newFakeId,
                   name: "",
                   email: "",
-                  userName: "",
                   createdAt: new Date(),
-                  isBan: false,
                 },
               ];
             });
             return newFakeId;
           }}
           onCancelNewUser={(newFakeId: string) => {
-            console.log("cancelling new user");
-
-            queryClient.setQueryData(["users", "all"], (data: User[]) => {
+            queryClient.setQueryData(["admins", "all"], (data: Admin[]) => {
               const newArr = [...data];
               return newArr.filter((user) => user._id !== newFakeId);
             });
           }}
-          onSaveNewUser={(newUser: User) => {
-            const { email, name, userName, phoneNumber } = newUser;
-            console.log(newUser);
-
+          onSaveNewUser={(newUser: Admin) => {
+            const { email, name } = newUser;
             const newPassword = generatePassword();
             userMutation({
               action: "add",
@@ -154,8 +147,6 @@ const AllUsers = () => {
                 password: newPassword,
                 email,
                 name,
-                userName,
-                phoneNumber,
               },
             });
           }}
@@ -231,4 +222,4 @@ const AllUsers = () => {
   );
 };
 
-export default AllUsers;
+export default AdminManagement;

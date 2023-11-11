@@ -1,23 +1,28 @@
 import "./App.css";
+//router
 import { RouterProvider } from "react-router-dom";
-// import { ThemeProvider } from "@mui/material/styles";
-
 import { router } from "./routes";
+//auth &sidebar
 import AuthContextProvider from "./context/AuthContext";
-// import theme from "./themes";
+import { SidebarProvider } from "./context/SidebarContext";
+//theme
 import { CssBaseline } from "@mui/material";
 import ThemeProvider from "./theme/ThemeProvider";
-import { SidebarProvider } from "./context/SidebarContext";
+//query client
+import { QueryClientProvider } from "@tanstack/react-query";
+import queryClient from "./util/query/queryClient";
 
 function App() {
   return (
     <SidebarProvider>
-      <AuthContextProvider>
-        <ThemeProvider>
-          <CssBaseline />
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </AuthContextProvider>
+      <ThemeProvider>
+        <CssBaseline />
+        <AuthContextProvider>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
+        </AuthContextProvider>
+      </ThemeProvider>
     </SidebarProvider>
   );
 }

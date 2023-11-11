@@ -1,7 +1,5 @@
 import { useRef, useState } from "react";
-
-import { NavLink, useNavigate } from "react-router-dom";
-
+import { NavLink } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -20,7 +18,6 @@ import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
 import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
 import AccountTreeTwoToneIcon from "@mui/icons-material/AccountTreeTwoTone";
-import { User } from "../../../../../interfaces/User.interface";
 import { useAuthContext } from "../../../../../hooks/useAuthContext";
 
 const UserBoxButton = styled(Button)(
@@ -59,14 +56,7 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
-  const { logOut } = useAuthContext();
-  const navigate = useNavigate();
-  const user: User = {
-    name: "Abdelrhman Sherif",
-    avatarUrl: "assets/avatars/somwAvatar.png",
-    role: "Website Admin",
-  };
-
+  const { logOut, user } = useAuthContext();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -82,11 +72,13 @@ function HeaderUserbox() {
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
-        <Avatar variant="rounded" alt={user.name} src={user.avatarUrl} />
+        <Avatar variant="rounded" alt={user.name.toUpperCase()} src="/" />
         <Hidden mdDown>
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
-            <UserBoxDescription variant="body2">{user.role}</UserBoxDescription>
+            <UserBoxDescription variant="body2">
+              {user.isOwner ? "Website Admin" : "Website Moderator"}
+            </UserBoxDescription>
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
@@ -107,15 +99,24 @@ function HeaderUserbox() {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar variant="rounded" alt={user.name} src={user.avatarUrl} />
+          <Avatar variant="rounded" alt={user.name.toUpperCase()} src="/" />
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
-            <UserBoxDescription variant="body2">{user.role}</UserBoxDescription>
+            <UserBoxDescription variant="body2">
+              {user.isOwner ? "Website Admin" : "Website Moderator"}
+            </UserBoxDescription>
           </UserBoxText>
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/management/profile/details" component={NavLink}>
+          <ListItem
+            button
+            to="/management/profile/details"
+            component={NavLink}
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
             <AccountBoxTwoToneIcon fontSize="small" />
             <ListItemText primary="My Profile" />
           </ListItem>
@@ -123,6 +124,9 @@ function HeaderUserbox() {
             button
             to="/management/dashboard-admins"
             component={NavLink}
+            onClick={() => {
+              setOpen(false);
+            }}
           >
             <AccountTreeTwoToneIcon fontSize="small" />
             <ListItemText primary="Admin Accounts" />
@@ -135,7 +139,6 @@ function HeaderUserbox() {
             fullWidth
             onClick={() => {
               logOut();
-              navigate("/auth/login");
             }}
           >
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />

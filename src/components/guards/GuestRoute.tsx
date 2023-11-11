@@ -6,7 +6,12 @@ const GuestRoute: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { isLoading, user } = useAuthContext();
 
   if (isLoading) {
-    return <LoadingBar />;
+    return (
+      <>
+        <LoadingBar />
+        {children}
+      </>
+    );
   }
   if (user) {
     return <Navigate to="/" />;

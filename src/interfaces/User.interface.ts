@@ -1,7 +1,14 @@
 export interface User {
-  email?: string;
-  name?: string;
   _id?: string;
-  avatarUrl?: string;
-  role: string;
+  email?: string;
+  userName?: string;
+  name?: string;
+  phoneNumber?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+  isBan?: boolean;
+  isNew?: boolean;
+  password?: string;
+  isVIP?: boolean;
 }

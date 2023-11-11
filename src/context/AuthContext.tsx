@@ -1,59 +1,90 @@
-import { createContext, useState, useEffect } from "react";
-import { User } from "../interfaces/User.interface";
+import { createContext, useState, useEffect, useMemo } from "react";
+import { Admin } from "../interfaces/Admin.interface";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import axiosInstance from "../util/query/axiosInstance";
 
 interface authObject {
   isLoading: boolean;
-  user: User | undefined;
-  login: (user: User) => void;
+  token: string;
+  user: Admin | undefined;
+  login: (values: {
+    email: string;
+    password: string;
+  }) => Promise<{ message: string; success: boolean }>;
   logOut: () => void;
 }
 
 export const AuthContext = createContext<authObject>({
   isLoading: false,
+  token: undefined,
   user: undefined,
   login: undefined,
   logOut: undefined,
 });
 const AuthContextProvider = (props: React.PropsWithChildren) => {
-  const [isLoading, setloading] = useState<boolean>(true);
-  const [user, setUser] = useState<User>();
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [token, setToken] = useState<string>(cookies.token);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
-  function login(user: User): void {
-    setloading(true);
-    localStorage.setItem("test-loggedIn", JSON.stringify(user));
-    setUser({
-      _id: user._id,
-      email: user.email,
-      role: "Website Admin",
-      name: "Abdelrhman Sherif",
-    });
+  const user = useMemo(() => {
+    if (token) {
+      const decodedUser: Admin = jwtDecode(token);
+      console.log(decodedUser);
 
-    setloading(false);
-  }
-  function logOut() {
-    setloading(true);
-    setUser(undefined);
-    localStorage.removeItem("test-loggedIn");
-    setloading(false);
-  }
-
-  useEffect(() => {
-    setloading(true);
-    const existingUser: string = localStorage.getItem("test-loggedIn");
-    if (existingUser) {
-      const parsedUser: User = JSON.parse(existingUser);
-      setUser({
-        _id: parsedUser._id,
-        email: parsedUser.email,
-        role: "Website Admin",
-        name: "Abdelrhman Sherif",
-      });
+      return decodedUser;
+    } else {
+      console.log("now no user");
+      return undefined;
     }
-    setloading(false);
-  }, []);
+  }, [token]);
+
+  const login = async (values: {
+    email: string;
+    password: string;
+  }): Promise<{
+    message: string;
+    success: boolean;
+  }> => {
+    setLoading(true);
+    try {
+      // this is a POST request to the /admin/login endpoint with the email and password object.
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/admin/login`,
+        values
+      );
+
+      // Get the token from the response data & save it to the cookies and the state
+      const token = data.token;
+      setCookie("token", token, {
+        path: "/",
+        maxAge: 86400, // Expires after 1 day (in milliseconds)
+        sameSite: true,
+      });
+      setLoading(false);
+      return { message: "Logged in successfully!", success: true };
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      return { message: error.message, success: false };
+    }
+  };
+
+  const logOut = async () => {
+    // Remove the token from the cookies and the state
+    removeCookie("token", { path: "/" });
+  };
+  useEffect(() => {
+    //keep sync between cookies and state, ensuring that scheduling upddates not reflecting the current auth state
+    setToken(cookies.token);
+  }, [cookies.token]);
+  useEffect(() => {
+    axiosInstance.defaults.headers.common["Authorization"] = token ? token : "";
+  }, [token]);
 
   return (
-    <AuthContext.Provider value={{ isLoading, user, login, logOut }}>
+    <AuthContext.Provider value={{ token, isLoading, user, login, logOut }}>
       {props.children}
     </AuthContext.Provider>
   );

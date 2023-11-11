@@ -26,8 +26,12 @@ const LoginForm = () => {
       })}
       onSubmit={async (values) => {
         console.log(values);
-        login({ _id: "wqerrytui", email: values.email, role: "not important" });
-        navigate("/");
+        const { success } = await login(values);
+        if (success) {
+          navigate("/");
+        } else {
+          //notification
+        }
       }}
     >
       {({

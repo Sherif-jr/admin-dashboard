@@ -4,6 +4,9 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import ProtectedRoute from "../../guards/ProtectedRoute";
+import Fab from "@mui/material/Fab";
+import ChatIcon from "@mui/icons-material/Chat";
+// import Chat from "../../UI/Chat";
 
 interface SidebarLayoutProps {
   guard?: boolean;
@@ -55,10 +58,37 @@ const MainLayout: FC = () => {
             },
           }}
         >
-          <Box display="block">
+          <Box display="block" p={2}>
             <Outlet />
           </Box>
         </Box>
+      </Box>
+      {/* ========= Chat Box ============ */}
+      {/* <Box
+        sx={{
+          position: "absolute",
+          bottom: "80px",
+          right: "30px",
+          zIndex: 6,
+        }}
+      >
+        <Chat />
+      </Box> */}
+      <Box sx={{ position: "absolute", bottom: "12px", right: "30px" }}>
+        <Fab
+          sx={{
+            bgcolor: theme.colors.primary.dark,
+            "&:hover": {
+              bgcolor: theme.colors.primary.main,
+            },
+          }}
+        >
+          <ChatIcon
+            sx={{
+              fill: "white",
+            }}
+          />
+        </Fab>
       </Box>
     </>
   );

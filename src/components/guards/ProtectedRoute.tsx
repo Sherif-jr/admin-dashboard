@@ -3,12 +3,12 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import LoadingBar from "../UI/LoadingBar";
 import { Navigate } from "react-router-dom";
 const ProtectedRoute: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { isLoading, user } = useAuthContext();
+  const { isLoading, token } = useAuthContext();
 
   if (isLoading) {
     return <LoadingBar />;
   }
-  if (!user) {
+  if (!token) {
     return <Navigate to="/auth/login" />;
   }
   return children;

@@ -193,7 +193,7 @@ const AdminsTable = ({
           ];
         } else {
           return [
-            <Tooltip title="Only owner can edit!">
+            <Tooltip disableInteractive title="Only owner can edit!">
               <GridActionsCellItem
                 icon={<EditOffIcon />}
                 label="NoEdit"

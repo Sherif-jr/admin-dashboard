@@ -1,6 +1,4 @@
-import ApexCharts from "apexcharts";
 import Chart from "react-apexcharts";
-import { useTheme } from "@mui/material/styles";
 import { Card } from "@mui/material";
 import { setChartData } from "./chartData/totalGrowthdata";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +8,6 @@ import { getAllUsers } from "../../util/query/httpFunctions/userHttpFunctions";
 import { getAllEvents } from "../../util/query/httpFunctions/eventHttpFunctions";
 
 const Dashboard = () => {
-  const theme = useTheme();
   const { data: users } = useQuery<User[]>({
     queryKey: ["users", "all"],
     queryFn: getAllUsers,

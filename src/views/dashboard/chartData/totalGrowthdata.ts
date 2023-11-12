@@ -1,4 +1,10 @@
-const chartData = {
+interface ChartData {
+  height: number;
+  options: ApexCharts.ApexOptions;
+  series: ApexAxisChartSeries | ApexNonAxisChartSeries;
+}
+
+const chartData: ChartData = {
   height: 480,
   //   type: "bar",
   options: {
@@ -40,7 +46,7 @@ const chartData = {
       },
     },
     xaxis: {
-      type: "time",
+      type: "category",
       categories: [
         "Jan",
         "Feb",

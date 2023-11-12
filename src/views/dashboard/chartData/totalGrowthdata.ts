@@ -10,7 +10,6 @@ const chartData: ChartData = {
   options: {
     chart: {
       id: "bar-chart",
-      stacked: true,
       toolbar: {
         show: true,
         tools: {

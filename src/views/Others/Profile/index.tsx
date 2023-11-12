@@ -1,8 +1,7 @@
 import { Avatar, Box, Card, Stack, TextField, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { Formik } from "formik";
-import React from "react";
-import { getAdmin } from "../../../util/query/httpFunctions/adminHttpFunctios";
+import { getAdmin } from "../../../util/query/httpFunctions/adminHttpFunctions";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { Admin } from "../../../interfaces/Admin.interface";
 
@@ -44,7 +43,9 @@ const Profile = () => {
           <Formik
             enableReinitialize
             initialValues={{ email: data.email, name: data.name }}
-            onSubmit={(values) => {}}
+            onSubmit={(values) => {
+              console.log(values);
+            }}
           >
             {({ handleSubmit, values, handleChange, handleBlur }) => (
               <form onSubmit={handleSubmit}>

@@ -17,7 +17,7 @@ import {
   deleteAdmin,
   editAdmin,
   getAdmins,
-} from "../../../util/query/httpFunctions/adminHttpFunctios";
+} from "../../../util/query/httpFunctions/adminHttpFunctions";
 import { Admin } from "../../../interfaces/Admin.interface";
 import { ContentCopy } from "@mui/icons-material";
 import { useState } from "react";

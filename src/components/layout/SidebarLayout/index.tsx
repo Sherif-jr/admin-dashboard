@@ -74,7 +74,7 @@ const MainLayout: FC = () => {
       >
         <Chat />
       </Box> */}
-      <Box sx={{ position: "absolute", bottom: "12px", right: "30px" }}>
+      <Box sx={{ position: "fixed", zIndex: 5, bottom: "12px", right: "30px" }}>
         <Fab
           sx={{
             bgcolor: theme.colors.primary.dark,

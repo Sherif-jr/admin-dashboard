@@ -32,4 +32,5 @@ async function deleteUser(id: string) {
   return data.data;
 }
 
+
 export { getAllUsers, editUser, addUser, deleteUser };

@@ -58,6 +58,7 @@ const LoginForm = () => {
               type="text"
               name="email"
               placeholder="Email"
+              label="Email"
               variant="outlined"
               value={values.email}
               onChange={handleChange}
@@ -70,6 +71,7 @@ const LoginForm = () => {
               type="text"
               name="password"
               placeholder="password"
+              label="Password"
               variant="outlined"
               value={values.password}
               onChange={handleChange}

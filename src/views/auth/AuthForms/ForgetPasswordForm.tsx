@@ -33,6 +33,7 @@ const ForgetPasswordForm = () => {
             type="text"
             name="email"
             placeholder="Email"
+            label="Email"
             variant="outlined"
             value={values.email}
             onChange={handleChange}
@@ -40,7 +41,13 @@ const ForgetPasswordForm = () => {
             helperText={(touched.email && errors.email) || " "}
             error={Boolean(touched.email && errors.email)}
           />
-          <Button variant="contained" type="submit" fullWidth size="large"sx={{mt:1}}>
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            size="large"
+            sx={{ mt: 1 }}
+          >
             Reset Password
           </Button>
         </form>

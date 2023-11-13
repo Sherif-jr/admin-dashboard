@@ -25,6 +25,7 @@ import queryClient from "../../../util/query/queryClient";
 import { AxiosError } from "axios";
 import generatePassword from "../../../util/passwordGenetator";
 import { useAuthContext } from "../../../hooks/useAuthContext";
+import { toast } from "react-toastify";
 
 interface ModalState {
   show: boolean;
@@ -85,6 +86,13 @@ const AdminManagement = () => {
     onSuccess: (_data, { action, user }) => {
       if (action === "add") {
         setModal({ show: true, newPassword: user.password, action: "add" });
+        toast.success("Added Successfully!");
+      }
+      if (action === "delete") {
+        toast.success("Deleted Successfully!");
+      }
+      if (action === "save") {
+        toast.success("Updated Successfully!");
       }
     },
     onError: (err: AxiosError<{ message: string[] | string }>) => {
@@ -93,6 +101,7 @@ const AdminManagement = () => {
         : err.response.data.message;
       console.log(error);
       setModal({ show: true, action: "error", message: error });
+      toast.error("Error. Task failed.");
     },
   });
 

@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import { Button, Stack } from "@mui/material";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const LoginForm = () => {
   const { login } = useAuthContext();
   const navigate = useNavigate();
@@ -26,11 +27,17 @@ const LoginForm = () => {
       })}
       onSubmit={async (values) => {
         console.log(values);
-        const { success } = await login(values);
+        const { success, message } = await login(values);
         if (success) {
           navigate("/");
         } else {
-          //notification
+          console.log(message);
+
+          toast.error(
+            message === "Network Error"
+              ? "Network Error. Check your network and try again."
+              : "Incorrect Email or Password"
+          );
         }
       }}
     >

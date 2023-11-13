@@ -16,6 +16,7 @@ import EventsTable from "./EventsTable/EventsTable";
 import { Event } from "../../interfaces/Event.interface";
 import queryClient from "../../util/query/queryClient";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface ModalState {
   show: boolean;
@@ -61,7 +62,14 @@ const AllEvents = () => {
     onSuccess: (_, { action }) => {
       if (action === "delete") {
         setModal(initialState);
+        toast.error("Deleted Successfully!");
       }
+      if (action === "save") {
+        toast.success("Updated Successfully!");
+      }
+    },
+    onError: () => {
+      toast.error("Error. Task failed.");
     },
   });
 

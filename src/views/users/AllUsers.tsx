@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import generatePassword from "../../util/passwordGenetator";
 import { ContentCopy } from "@mui/icons-material";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface ModalState {
   show: boolean;
@@ -87,6 +88,13 @@ const AllUsers = () => {
     onSuccess: (_data, { action, user }) => {
       if (action === "add") {
         setModal({ show: true, newPassword: user.password, action: "add" });
+        toast.success("Added successfully!");
+      }
+      if (action === "save") {
+        toast.success("Updated successfully!");
+      }
+      if (action === "delete") {
+        toast.success("Deleted successfully!");
       }
     },
     onError: (err: AxiosError<{ message: string[] | string }>) => {
@@ -95,6 +103,7 @@ const AllUsers = () => {
         : err.response.data.message;
       console.log(error);
       setModal({ show: true, action: "error", message: error });
+      toast.error("Error. Task failed.");
     },
   });
 

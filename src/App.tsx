@@ -11,6 +11,7 @@ import ThemeProvider from "./theme/ThemeProvider";
 //query client
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from "./util/query/queryClient";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <AuthContextProvider>
           <QueryClientProvider client={queryClient}>
             <RouterProvider router={router} />
+            <ToastContainer />
           </QueryClientProvider>
         </AuthContextProvider>
       </ThemeProvider>

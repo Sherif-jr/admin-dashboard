@@ -16,6 +16,7 @@ import {
   getAllHosts,
 } from "../../util/query/httpFunctions/hostHttpFunctions";
 import queryClient from "../../util/query/queryClient";
+import { toast } from "react-toastify";
 
 interface ModalState {
   show: boolean;
@@ -62,7 +63,14 @@ const AllHosts = () => {
     onSuccess: (_, { action }) => {
       if (action === "delete") {
         setModal(initialState);
+        toast.success("Deleted Successfully");
       }
+      if (action === "save") {
+        toast.success("Updated Successfully");
+      }
+    },
+    onError: () => {
+      toast.error("An error occurred");
     },
   });
   return (

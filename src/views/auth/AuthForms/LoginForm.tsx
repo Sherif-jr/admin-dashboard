@@ -68,7 +68,7 @@ const LoginForm = () => {
             />
             <TextField
               fullWidth
-              type="text"
+              type="password"
               name="password"
               placeholder="password"
               label="Password"

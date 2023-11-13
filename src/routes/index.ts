@@ -3,9 +3,9 @@ import { AuthRoutes } from "./AuthRoutes";
 import { MainRoutes } from "./MainRoutes";
 import { Users } from "./Users";
 import { Events } from "./Events";
-import { WebsiteSettings } from "./WebSiteSettings";
 import { Others } from "./Others";
 import { Hosts } from "./Hosts";
+import { Places } from "./Places";
 
 export const router = createBrowserRouter([
   MainRoutes,
@@ -13,6 +13,6 @@ export const router = createBrowserRouter([
   Users,
   Events,
   Hosts,
-  WebsiteSettings,
+  Places,
   Others,
 ]);

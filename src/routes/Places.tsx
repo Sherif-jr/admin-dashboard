@@ -3,17 +3,17 @@ import Loadable from "../components/Loadable";
 import { RouteObject } from "react-router-dom";
 import SidebarLayout from "../components/layout/SidebarLayout";
 
-const LandingSettings: React.ComponentType = Loadable(
-  lazy(() => import("../views/websiteSettings/LandingSettings"))
+const AllPlaces: React.ComponentType = Loadable(
+  lazy(() => import("../views/places/AllPlaces"))
 );
 
-export const WebsiteSettings: RouteObject = {
+export const Places: RouteObject = {
   path: "",
   element: <SidebarLayout guard />,
   children: [
     {
-      path: "/website-settings/landing",
-      element: <LandingSettings />,
+      path: "/places/all",
+      element: <AllPlaces />,
     },
   ],
 };

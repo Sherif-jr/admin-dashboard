@@ -9,14 +9,28 @@ import {
   GridRowModes,
   GridRowModesModel,
 } from "@mui/x-data-grid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //icons
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { Box } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 import { Event } from "../../../interfaces/Event.interface";
+import { User } from "../../../interfaces/User.interface";
+import { getUser } from "../../../util/query/httpFunctions/userHttpFunctions";
+
+const UserEmailCell = ({ id }) => {
+  const [userEmail, setUserEmail] = useState("...");
+  useEffect(() => {
+    async function getEmail() {
+      const user: User = await getUser(id);
+      setUserEmail(user.email);
+    }
+    getEmail();
+  }, []);
+  return <p>{userEmail}</p>;
+};
 
 const EventsTable = ({ data, isLoading, onSaveEditEvent, onDeleteEvent }) => {
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -57,13 +71,23 @@ const EventsTable = ({ data, isLoading, onSaveEditEvent, onDeleteEvent }) => {
       headerName: "Title",
       type: "string",
       flex: 1,
+      minWidth: 200,
       editable: true,
+      renderCell: ({ row, value }) => {
+        return (
+          <>
+            <Avatar src={row.posterPath} sx={{ mr: 1 }} />
+            <p>{value}</p>
+          </>
+        );
+      },
     },
     {
       field: "description",
       headerName: "Description",
       type: "string",
       flex: 1,
+      minWidth: 200,
       editable: true,
     },
     {
@@ -71,22 +95,33 @@ const EventsTable = ({ data, isLoading, onSaveEditEvent, onDeleteEvent }) => {
       headerName: "Category",
       type: "string",
       flex: 1,
+      minWidth: 100,
       editable: true,
     },
     {
       field: "ticketCount",
       headerName: "Total Tickets",
       type: "number",
-      flex: 0.9,
       editable: true,
       align: "center",
+      width: 100,
+    },
+    {
+      field: "createdBy",
+      headerName: "created by",
+      type: "string",
+      minWidth: 250,
+      flex: 1,
+      renderCell: ({ value }) => {
+        return <UserEmailCell id={value} />;
+      },
     },
     {
       field: "dateTime",
       headerName: "Scheduled Date",
       type: "date",
-      flex: 1,
       editable: true,
+      width: 100,
       valueGetter: (params) => new Date(params.value),
     },
     {

@@ -15,7 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { Box } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 import { Place } from "../../../interfaces/Place.interface";
 
 const PlacesTable = ({ data, isLoading, onSaveEditHost, onDeleteHost }) => {
@@ -57,20 +57,39 @@ const PlacesTable = ({ data, isLoading, onSaveEditHost, onDeleteHost }) => {
       headerName: "Description",
       type: "string",
       flex: 1,
+      minWidth: 200,
       editable: true,
+      renderCell: ({ row, value }) => {
+        return (
+          <>
+            <Avatar src={row.placPhoto} sx={{ mr: 1 }} />
+            <p>{value}</p>
+          </>
+        );
+      },
     },
     {
       field: "address",
       headerName: "Address",
       type: "string",
       flex: 1,
+      minWidth: 150,
       editable: true,
     },
     {
-      field: "category",
-      headerName: "Category",
+      field: "googleMapUrl",
+      headerName: "Map Url",
       type: "string",
       flex: 1,
+      minWidth: 200,
+      editable: true,
+    },
+    {
+      field: "createdBy",
+      headerName: "created by",
+      type: "string",
+      flex: 1,
+      minWidth: 250,
       editable: true,
     },
     {

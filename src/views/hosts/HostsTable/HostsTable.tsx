@@ -9,7 +9,7 @@ import {
   GridRowModes,
   GridRowModesModel,
 } from "@mui/x-data-grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 //icons
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -17,6 +17,20 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { Box } from "@mui/material";
 import { Event } from "../../../interfaces/Event.interface";
+import { User } from "../../../interfaces/User.interface";
+import { getUser } from "../../../util/query/httpFunctions/userHttpFunctions";
+
+const UserEmailCell = ({ id }) => {
+  const [userEmail, setUserEmail] = useState("...");
+  useEffect(() => {
+    async function getEmail() {
+      const user: User = await getUser(id);
+      setUserEmail(user.email);
+    }
+    getEmail();
+  }, []);
+  return <p>{userEmail}</p>;
+};
 
 const HostsTable = ({ data, isLoading, onSaveEditHost, onDeleteHost }) => {
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -57,6 +71,7 @@ const HostsTable = ({ data, isLoading, onSaveEditHost, onDeleteHost }) => {
       headerName: "Name",
       type: "string",
       flex: 1,
+      minWidth: 200,
       editable: true,
     },
     {
@@ -64,7 +79,18 @@ const HostsTable = ({ data, isLoading, onSaveEditHost, onDeleteHost }) => {
       headerName: "Description",
       type: "string",
       flex: 1,
+      minWidth: 200,
       editable: true,
+    },
+    {
+      field: "createdBy",
+      headerName: "Created By",
+      type: "string",
+      flex: 1,
+      minWidth: 250,
+      renderCell: ({ value }) => {
+        return <UserEmailCell id={value} />;
+      },
     },
     {
       field: "createdAt",

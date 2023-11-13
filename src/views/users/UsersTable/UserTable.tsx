@@ -17,7 +17,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { Box, Button } from "@mui/material";
+import { Avatar, Box, Button } from "@mui/material";
 import { User } from "../../../interfaces/User.interface";
 
 function EditToolbar({ onAddNewUser, newUserFkId, setNewUserFkId }) {
@@ -123,13 +123,23 @@ const UsersTable = ({
       headerName: "Name",
       type: "string",
       flex: 1,
+      minWidth: 200,
       editable: true,
+      renderCell: ({ row, value }) => {
+        return (
+          <>
+            <Avatar src={row.proPicPath} sx={{ mr: 1 }} />
+            <p>{value}</p>
+          </>
+        );
+      },
     },
     {
       field: "email",
       headerName: "Email",
       type: "string",
       flex: 1,
+      minWidth: 250,
       editable: true,
     },
     {
@@ -137,6 +147,7 @@ const UsersTable = ({
       headerName: "Username",
       type: "string",
       flex: 1,
+      minWidth: 150,
       editable: true,
     },
     {
@@ -144,6 +155,7 @@ const UsersTable = ({
       headerName: "Phone Number",
       type: "string",
       flex: 1,
+      minWidth: 150,
       editable: true,
     },
     {
@@ -151,6 +163,7 @@ const UsersTable = ({
       headerName: "Banned",
       type: "boolean",
       flex: 1,
+      minWidth: 80,
       editable: true,
     },
     {
@@ -158,6 +171,7 @@ const UsersTable = ({
       headerName: "Subscriber",
       type: "boolean",
       flex: 1,
+      minWidth: 100,
       editable: true,
     },
     {

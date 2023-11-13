@@ -4,8 +4,8 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import ProtectedRoute from "../../guards/ProtectedRoute";
-import Fab from "@mui/material/Fab";
-import ChatIcon from "@mui/icons-material/Chat";
+// import Fab from "@mui/material/Fab";
+// import ChatIcon from "@mui/icons-material/Chat";
 // import Chat from "../../UI/Chat";
 
 interface SidebarLayoutProps {
@@ -74,7 +74,7 @@ const MainLayout: FC = () => {
       >
         <Chat />
       </Box> */}
-      <Box sx={{ position: "fixed", zIndex: 5, bottom: "12px", right: "30px" }}>
+      {/* <Box sx={{ position: "fixed", zIndex: 5, bottom: "12px", right: "30px" }}>
         <Fab
           sx={{
             bgcolor: theme.colors.primary.dark,
@@ -89,7 +89,7 @@ const MainLayout: FC = () => {
             }}
           />
         </Fab>
-      </Box>
+      </Box> */}
     </>
   );
 };

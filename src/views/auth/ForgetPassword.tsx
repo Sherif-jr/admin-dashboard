@@ -23,8 +23,19 @@ const ForgetPassword = () => {
             <img
               src={Logo}
               alt="logo"
-              style={{ objectFit: "contain", width: "100%" }}
+              width="250"
+              style={{
+                marginRight: "auto",
+                marginLeft: "auto",
+                display: "block",
+              }}
             />
+            <Typography variant="h1" sx={{ textAlign: "center", mt: "-30px" }}>
+              Eventazia
+            </Typography>
+            <Typography variant="h5" sx={{ textAlign: "center" }}>
+              Admin Dashboard
+            </Typography>
           </Box>
           <ForgetPasswordForm />
           <Divider />

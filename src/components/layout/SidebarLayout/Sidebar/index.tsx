@@ -10,11 +10,12 @@ import {
   useTheme,
   lighten,
   darken,
+  Typography,
 } from "@mui/material";
 
 import Scroll from "../../../UI/Scroll";
 import SidebarMenu from "./SidebarMenu";
-import Logo from "../../../../assets/logo.png";
+import Logo from "../../../../assets/logo-light.png";
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -55,12 +56,16 @@ function Sidebar() {
         <Scroll>
           <Box mt={3}>
             <Box
-              mx={2}
               sx={{
-                width: 52,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <img src={Logo} alt="" width="120" />
+              <img src={Logo} alt="" width="80" />
+              <Typography display="inline" variant="h2">
+                Eventazia
+              </Typography>
             </Box>
           </Box>
           <Divider
@@ -100,12 +105,16 @@ function Sidebar() {
           <Scroll>
             <Box mt={3}>
               <Box
-                mx={2}
                 sx={{
-                  width: 52,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                <img src={Logo} alt="" width="120" />
+                <img src={Logo} alt="" width="80" />
+                <Typography display="inline" variant="h2">
+                  Eventazia
+                </Typography>
               </Box>
             </Box>
             <Divider

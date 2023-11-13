@@ -35,5 +35,18 @@ async function getUser(id: string) {
   const { data } = await axiosInstance.get(`user/${id}`);
   return data.data;
 }
+async function editUserPassword(id: string, newPassword: string) {
+  const { data } = await axiosInstance.patch(`user/${id}`, {
+    password: newPassword,
+  });
+  return data.data;
+}
 
-export { getAllUsers, editUser, addUser, deleteUser, getUser };
+export {
+  getAllUsers,
+  editUser,
+  addUser,
+  deleteUser,
+  getUser,
+  editUserPassword,
+};

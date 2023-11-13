@@ -17,8 +17,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { Avatar, Box, Button } from "@mui/material";
+import { Avatar, Box, Button, Tooltip } from "@mui/material";
 import { User } from "../../../interfaces/User.interface";
+import { Key } from "@mui/icons-material";
 
 function EditToolbar({ onAddNewUser, newUserFkId, setNewUserFkId }) {
   const handleClick = () => {
@@ -55,6 +56,7 @@ const UsersTable = ({
   onSaveNewUser,
   onSaveEditUser,
   onDeleteUser,
+  handleEditPassword,
 }) => {
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [newUserFkId, setNewUserFkId] = useState<string>(null);
@@ -233,6 +235,16 @@ const UsersTable = ({
             }}
             color="inherit"
           />,
+          <Tooltip title="Change password" disableInteractive>
+            <GridActionsCellItem
+              icon={<Key />}
+              label="Change Password"
+              onClick={() => {
+                handleEditPassword(id);
+              }}
+              color="inherit"
+            />
+          </Tooltip>,
         ];
       },
     },

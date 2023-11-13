@@ -9,6 +9,7 @@ import {
   DialogTitle,
   IconButton,
   Stack,
+  TextField,
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { User } from "../../interfaces/User.interface";
@@ -16,11 +17,12 @@ import {
   addUser,
   deleteUser,
   editUser,
+  editUserPassword,
   getAllUsers,
 } from "../../util/query/httpFunctions/userHttpFunctions";
 import UsersTable from "./UsersTable/UserTable";
 import queryClient from "../../util/query/queryClient";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import generatePassword from "../../util/passwordGenetator";
 import { ContentCopy } from "@mui/icons-material";
 import { AxiosError } from "axios";
@@ -28,21 +30,23 @@ import { toast } from "react-toastify";
 
 interface ModalState {
   show: boolean;
-  action: "add" | "delete" | "error";
+  action: "add" | "delete" | "error" | "password";
   newPassword?: string;
-  toDeleteId?: string;
+  id?: string;
   message?: string;
 }
 const initialModal: ModalState = {
   show: false,
   action: "delete",
   newPassword: "",
-  toDeleteId: "",
+  id: "",
   message: "",
 };
 
 const AllUsers = () => {
   const [modal, setModal] = useState<ModalState>(initialModal);
+  const modalInputRef = useRef<HTMLInputElement>();
+  const [modalPassError, setModalPassError] = useState(false);
   const { data, isRefetching, isLoading } = useQuery<User[]>({
     queryKey: ["users", "all"],
     queryFn: getAllUsers,
@@ -57,10 +61,12 @@ const AllUsers = () => {
       action,
       user,
       id,
+      newPassword,
     }: {
       action: string;
       user?: User;
       id?: string;
+      newPassword?: string;
     }) => {
       if (action === "save") {
         return editUser(user);
@@ -70,6 +76,9 @@ const AllUsers = () => {
       }
       if (action === "add") {
         return addUser(user);
+      }
+      if (action === "password") {
+        editUserPassword(id, newPassword);
       }
     },
     onMutate: ({ action, id }) => {
@@ -124,7 +133,7 @@ const AllUsers = () => {
             setModal({
               show: true,
               action: "delete",
-              toDeleteId: id,
+              id: id,
             });
           }}
           onAddNewUser={() => {
@@ -168,6 +177,13 @@ const AllUsers = () => {
               },
             });
           }}
+          handleEditPassword={(id: string) => {
+            setModal({
+              show: true,
+              action: "password",
+              id: id,
+            });
+          }}
         />
       </Card>
       <Dialog
@@ -181,6 +197,8 @@ const AllUsers = () => {
             ? "Are you sure to delete this user?"
             : modal.action === "add"
             ? "Add a new user"
+            : modal.action === "password"
+            ? "Change the password for this user."
             : "Error"}
         </DialogTitle>
         <DialogContent>
@@ -189,6 +207,8 @@ const AllUsers = () => {
               ? "This action is permanent."
               : modal.action === "add"
               ? "Copy the password to the clipboard."
+              : modal.action === "password"
+              ? "Enter the new password."
               : modal.message}
           </DialogContentText>
           {modal.action === "add" ? (
@@ -214,6 +234,27 @@ const AllUsers = () => {
                 </IconButton>
               </Box>
             </Stack>
+          ) : modal.action === "password" ? (
+            <TextField
+              label="New Password"
+              placeholder="New Password"
+              sx={{ mt: 1 }}
+              inputRef={modalInputRef}
+              error={modalPassError}
+              helperText={modalPassError ? "Not a valid password" : " "}
+              onFocus={() => {
+                setModalPassError(false);
+              }}
+              onBlur={(e) => {
+                const regex =
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$/;
+                if (regex.test(e.target.value)) {
+                  setModalPassError(true);
+                } else {
+                  setModalPassError(false);
+                }
+              }}
+            />
           ) : null}
         </DialogContent>
         <DialogActions>
@@ -227,7 +268,20 @@ const AllUsers = () => {
           <Button
             onClick={() => {
               if (modal.action === "delete") {
-                userMutation({ action: "delete", id: modal.toDeleteId });
+                userMutation({ action: "delete", id: modal.id });
+              }
+              if (modal.action === "password") {
+                const regex =
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if (regex.test(modalInputRef.current.value)) {
+                  console.log("good password");
+
+                  setModalPassError(false);
+                  userMutation({ action: "password", id: modal.id });
+                } else {
+                  console.log("bad password");
+                  setModalPassError(true);
+                }
               }
               setModal(initialModal);
             }}

@@ -1,20 +1,39 @@
 import { Avatar, Box, Card, Stack, TextField, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Formik } from "formik";
-import { getAdmin } from "../../../util/query/httpFunctions/adminHttpFunctions";
+import {
+  editAdmin,
+  getAdmin,
+} from "../../../util/query/httpFunctions/adminHttpFunctions";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { Admin } from "../../../interfaces/Admin.interface";
+import queryClient from "../../../util/query/queryClient";
+import { toast } from "react-toastify";
+import { LoadingButton } from "@mui/lab";
 
 const Profile = () => {
   const { user } = useAuthContext();
-  const { data } = useQuery<Admin>({
+  const { data, isPending } = useQuery<Admin>({
     queryKey: ["admins", "current"],
     queryFn: () => {
       return getAdmin(user._id);
     },
     initialData: { email: "", name: "" },
   });
-  console.log(data);
+  const { mutate, isPending: isMutPending } = useMutation({
+    mutationFn: ({ user }: { user: Admin }) => {
+      return editAdmin(user);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["admins", "current"] });
+    },
+    onSuccess: () => {
+      toast.success("Edited Successfully!");
+    },
+    onError: () => {
+      toast.error("Error. Task failed.");
+    },
+  });
   return (
     <>
       <Box
@@ -44,7 +63,7 @@ const Profile = () => {
             enableReinitialize
             initialValues={{ email: data.email, name: data.name }}
             onSubmit={(values) => {
-              console.log(values);
+              mutate({ user: { _id: user._id, ...values } });
             }}
           >
             {({ handleSubmit, values, handleChange, handleBlur }) => (
@@ -56,6 +75,7 @@ const Profile = () => {
                   <TextField
                     fullWidth
                     placeholder="Name"
+                    label="Name"
                     name="name"
                     value={values.name}
                     onChange={handleChange}
@@ -63,11 +83,19 @@ const Profile = () => {
                   />
                   <TextField
                     placeholder="Email"
+                    label="Email"
                     name="email"
                     value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
+                  <LoadingButton
+                    variant="contained"
+                    type="submit"
+                    loading={isMutPending || isPending}
+                  >
+                    Save
+                  </LoadingButton>
                 </Stack>
               </form>
             )}

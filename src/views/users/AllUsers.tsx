@@ -105,6 +105,9 @@ const AllUsers = () => {
       if (action === "delete") {
         toast.success("Deleted successfully!");
       }
+      if (action === "password") {
+        toast.success("Updated password successfully!");
+      }
     },
     onError: (err: AxiosError<{ message: string[] | string }>) => {
       const error = Array.isArray(err.response.data.message)
@@ -274,12 +277,9 @@ const AllUsers = () => {
                 const regex =
                   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
                 if (regex.test(modalInputRef.current.value)) {
-                  console.log("good password");
-
                   setModalPassError(false);
                   userMutation({ action: "password", id: modal.id });
                 } else {
-                  console.log("bad password");
                   setModalPassError(true);
                 }
               }

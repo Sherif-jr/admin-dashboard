@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import AuthWrapper from "./AuthWrapper";
 import LoginForm from "./AuthForms/LoginForm";
 import Logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { Card, Typography } from "@mui/material";
 const Login = () => {
   return (
@@ -45,7 +45,7 @@ const Login = () => {
               p: 2,
             }}
           >
-            <Typography
+            {/* <Typography
               component={Link}
               to="/auth/forgot-password"
               variant="subtitle1"
@@ -57,7 +57,7 @@ const Login = () => {
               }}
             >
               Forgot Password?
-            </Typography>
+            </Typography> */}
           </Box>
         </Box>
       </Card>

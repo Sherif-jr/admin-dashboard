@@ -278,7 +278,11 @@ const AllUsers = () => {
                   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
                 if (regex.test(modalInputRef.current.value)) {
                   setModalPassError(false);
-                  userMutation({ action: "password", id: modal.id });
+                  userMutation({
+                    action: "password",
+                    id: modal.id,
+                    newPassword: modalInputRef.current.value,
+                  });
                 } else {
                   setModalPassError(true);
                 }

@@ -9,7 +9,7 @@ import {
   GridRowModes,
   GridRowModesModel,
 } from "@mui/x-data-grid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //icons
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -17,6 +17,20 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { Avatar, Box } from "@mui/material";
 import { Place } from "../../../interfaces/Place.interface";
+import { User } from "../../../interfaces/User.interface";
+import { getUser } from "../../../util/query/httpFunctions/userHttpFunctions";
+
+const UserEmailCell = ({ id }) => {
+  const [userEmail, setUserEmail] = useState("...");
+  useEffect(() => {
+    async function getEmail() {
+      const user: User = await getUser(id);
+      setUserEmail(user.email);
+    }
+    getEmail();
+  }, []);
+  return <p>{userEmail}</p>;
+};
 
 const PlacesTable = ({ data, isLoading, onSaveEditHost, onDeleteHost }) => {
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -90,7 +104,9 @@ const PlacesTable = ({ data, isLoading, onSaveEditHost, onDeleteHost }) => {
       type: "string",
       flex: 1,
       minWidth: 250,
-      editable: true,
+      renderCell: ({ value }) => {
+        return <UserEmailCell id={value} />;
+      },
     },
     {
       field: "createdAt",
